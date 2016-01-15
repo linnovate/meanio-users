@@ -1,0 +1,20 @@
+{
+  "name": "users",
+  "version": "0.1.0",
+  "description": "Users package",
+  "author": {
+    "name": "Linnovate"
+  },
+  "mean": "0.6.x",
+  "engines": {
+    "node": "4.2.x",
+    "npm": "3.x"
+  },
+  "scripts": {
+    "postinstall" : "bower install"
+  },
+  "dependencies": {
+    "meanio-system" : "^0.1.x"
+  },
+  "license": "MIT"
+}
