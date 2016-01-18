@@ -38,7 +38,7 @@ module.exports = function(MeanUser) {
           var escaped = JSON.stringify(payload);      
           escaped = encodeURI(escaped);
           // We are sending the payload inside the token
-          var token = jwt.sign(escaped, config.secret, { expiresInMinutes: 60*5 });
+          var token = jwt.sign(escaped, config.secret, { expiresIn: 60*60*5 });
           res.cookie('token', token);
           var destination = config.strategies.landingPage;
           if(!req.cookies.redirect)
@@ -147,7 +147,7 @@ module.exports = function(MeanUser) {
                     });
 
                     // We are sending the payload inside the token
-                    var token = jwt.sign(escaped, config.secret, { expiresInMinutes: 60*5 });
+                    var token = jwt.sign(escaped, config.secret, { expiresIn: 60*60*5 });
                     res.json({ 
                       token: token,
                       redirect: config.strategies.landingPage
@@ -168,7 +168,7 @@ module.exports = function(MeanUser) {
                 var payload = req.user;
                 var escaped = JSON.stringify(payload);
                 escaped = encodeURI(escaped);
-                var token = jwt.sign(escaped, config.secret, { expiresInMinutes: 60*5 });
+                var token = jwt.sign(escaped, config.secret, { expiresIn: 60*60*5 });
                 res.json({ token: token });
             }
         },

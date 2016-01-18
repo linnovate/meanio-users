@@ -23,7 +23,8 @@
     "passport-google-oauth": "latest",
     "passport-linkedin": "latest",
     "passport-local": "latest",
-    "passport-twitter": "latest"
+    "passport-twitter": "latest",
+    "nodemailer": "latest"
   },
   "license": "MIT"
 }
