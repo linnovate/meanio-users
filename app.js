@@ -39,7 +39,7 @@ MeanUser.register(function(app, database, passport) {
     //We enable routing. By default the Package Object is passed to the routes
     MeanUser.routes(app, MeanUser.auth, database, passport);
 
-    MeanUser.angularDependencies(['angular-jwt', 'mean.system']);
+    MeanUser.angularDependencies(['angular-jwt']);
 
     MeanUser.events.defaultData({
         type: 'user'

@@ -18,7 +18,12 @@
     "postinstall" : "bower install"
   },
   "dependencies": {
-    "meanio-system" : "^0.1.x"
+    "passport-facebook": "latest",
+    "passport-github": "latest",
+    "passport-google-oauth": "latest",
+    "passport-linkedin": "latest",
+    "passport-local": "latest",
+    "passport-twitter": "latest"
   },
   "license": "MIT"
 }
