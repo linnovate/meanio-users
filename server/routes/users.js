@@ -49,7 +49,7 @@ module.exports = function(MeanUser, app, auth, database, passport) {
           var escaped = JSON.stringify(payload);      
           escaped = encodeURI(escaped);
           // We are sending the payload inside the token
-          var token = jwt.sign(escaped, config.secret, { expiresIn: 60*60*5 });
+          var token = jwt.sign(escaped, config.secret);
           MeanUser.events.publish({
             action: 'logged_in',
             user: {
