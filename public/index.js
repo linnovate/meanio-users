@@ -1,3 +1,3 @@
 'use strict';
 
-import 'angular-jwt';
+require('angular-jwt');
