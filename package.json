@@ -25,7 +25,8 @@
     "passport-local": "latest",
     "passport-twitter": "latest",
     "nodemailer": "latest",
-    "meanio-circles": "^0.1.x"
+    "meanio-circles": "^0.1.x",
+    "angular-jwt" : "latest"
   },
   "license": "MIT"
 }
