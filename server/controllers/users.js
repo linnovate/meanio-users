@@ -156,6 +156,14 @@ module.exports = function(MeanUser) {
                 res.status(200);
             });
         },
+        loggedin: function (req, res) {
+            if (!req.isAuthenticated()) return res.send('0');
+            User.findById(req.user._id)
+                .exec(function (err, user) {
+                    if (err) return next(err);
+                    res.send(user ? user : '0');
+                })
+        },
         /**
          * Send User
          */
