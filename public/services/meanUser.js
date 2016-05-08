@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$location', '$stateParams', '$cookies', '$q', '$timeout', 'Global'
+angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$location', '$stateParams', '$cookies', '$q', '$timeout', 'Global',
   function($rootScope, $http, $location, $stateParams, $cookies, $q, $timeout, Global) {
 
     var self;
