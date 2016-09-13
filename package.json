@@ -14,9 +14,6 @@
     "node": "4.2.x",
     "npm": "3.x"
   },
-  "scripts": {
-    "postinstall" : "bower install"
-  },
   "dependencies": {
     "passport-facebook": "latest",
     "passport-github": "latest",
