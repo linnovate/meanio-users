@@ -1,13 +1,13 @@
 {
   "name": "meanio-users",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "description": "Users package",
   "author": {
     "name": "Linnovate"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/rjVapes/meanio-users.git"
+    "url": "https://github.com/linnovate/meanio-users.git"
   },
   "mean": "0.7.x",
   "engines": {
