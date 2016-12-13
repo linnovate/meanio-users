@@ -49,8 +49,8 @@ angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$loca
       this.resetpassworderror = null;
       this.validationError = null;
       self = this;
-      $http.get('/api/users/me').success(function(response) {
-        if(!response && $cookies.get('token') && $cookies.get('redirect')) {
+      $http.get('/api/users/me').then(function(response) {
+        if(!response.data && $cookies.get('token') && $cookies.get('redirect')) {
           self.onIdentity.bind(self)({
             token: $cookies.get('token'),
             redirect: $cookies.get('redirect').replace(/^"|"$/g, '')
@@ -58,7 +58,7 @@ angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$loca
           $cookies.remove('token');
           $cookies.remove('redirect');
         } else {
-          self.onIdentity.bind(self)(response);
+          self.onIdentity.bind(self)(response.data);
         }
       });
     }
@@ -80,8 +80,8 @@ angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$loca
       var userObj = this.user;
       var self = this;
       // Add circles info to user
-      $http.get('/api/circles/mine').success(function(acl) {
-        self.acl = acl;
+      $http.get('/api/circles/mine').then(function(response) {
+        self.acl = response.data;
         if (destination) {
           $location.path(destination);
         }
@@ -103,6 +103,7 @@ angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$loca
     var MeanUser = new MeanUserKlass();
 
     MeanUserKlass.prototype.login = function (user) {
+      var self = this;
       // this is an ugly hack due to mean-admin needs
       var destination = $location.path().indexOf('/login') === -1 ? $location.absUrl() : false;
       $http.post('/api/login', {
@@ -110,11 +111,16 @@ angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$loca
           password: user.password,
           redirect: destination
         })
-        .success(this.onIdentity.bind(this))
-        .error(this.onIdFail.bind(this));
+        .then(function (response){
+          self.onIdentity.bind(self);
+        })
+        .catch(function (response){
+          self.onIdFail.bind(self);
+        });
     };
 
     MeanUserKlass.prototype.register = function(user) {
+      var self = this;
       $http.post('/api/register', {
         email: user.email,
         password: user.password,
@@ -122,27 +128,38 @@ angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$loca
         username: user.username,
         name: user.name
       })
-        .success(this.onIdentity.bind(this))
-        .error(this.onIdFail.bind(this));
+        .then(function (response){
+          self.onIdentity.bind(self);
+        })
+        .catch(function (response){
+          self.onIdFail.bind(self);
+        });
     };
 
     MeanUserKlass.prototype.resetpassword = function(user) {
+      var self = this;
         $http.post('/api/reset/' + $stateParams.tokenId, {
           password: user.password,
           confirmPassword: user.confirmPassword
         })
-          .success(this.onIdentity.bind(this))
-          .error(this.onIdFail.bind(this));
+          .then(function (response){
+            self.onIdentity.bind(self);
+          })
+          .catch(function (response){
+            self.onIdFail.bind(self);
+          });
       };
 
     MeanUserKlass.prototype.forgotpassword = function(user) {
         $http.post('/api/forgot-password', {
           text: user.email
         })
-          .success(function(response) {
-            $rootScope.$emit('forgotmailsent', response);
+          .then(function(response) {
+            $rootScope.$emit('forgotmailsent', response.data);
           })
-          .error(this.onIdFail.bind(this));
+          .catch(function (response){
+            self.onIdFail.bind(self);
+          });
       };
 
     MeanUserKlass.prototype.logout = function(){
@@ -150,7 +167,7 @@ angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$loca
       this.loggedin = false;
       this.isAdmin = false;
 
-      $http.get('/api/logout').success(function(data) {
+      $http.get('/api/logout').then(function(response) {
         localStorage.removeItem('JWT');
         $rootScope.$emit('logout');
         Global.authenticate();
@@ -161,7 +178,8 @@ angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$loca
      var deferred = $q.defer();
 
       // Make an AJAX call to check if the user is logged in
-      $http.get('/api/loggedin').success(function(user) {
+      $http.get('/api/loggedin').then(function(response) {
+        var user = response.data;
         // Authenticated
         if (user !== '0') $timeout(deferred.resolve);
 
@@ -182,7 +200,8 @@ angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$loca
       var deferred = $q.defer();
 
       // Make an AJAX call to check if the user is logged in
-      $http.get('/api/loggedin').success(function(user) {
+      $http.get('/api/loggedin').then(function(response) {
+        var user = response.data;
         // Authenticated
         if (user !== '0') {
           $timeout(deferred.reject);
@@ -199,7 +218,8 @@ angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$loca
      var deferred = $q.defer();
 
       // Make an AJAX call to check if the user is logged in
-      $http.get('/api/loggedin').success(function(user) {
+      $http.get('/api/loggedin').then(function(response) {
+        var user = response.data;
         // Authenticated
         if (user !== '0' && user.roles.indexOf('admin') !== -1) $timeout(deferred.resolve);
 
