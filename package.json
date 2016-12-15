@@ -15,15 +15,16 @@
     "npm": "3.x"
   },
   "dependencies": {
+    "angular-jwt": "latest",
+    "cpf_cnpj": "^0.2.0",
+    "meanio-circles": "^0.1.x",
+    "nodemailer": "latest",
     "passport-facebook": "latest",
     "passport-github": "latest",
     "passport-google-oauth": "latest",
     "passport-linkedin": "latest",
     "passport-local": "latest",
-    "passport-twitter": "latest",
-    "nodemailer": "latest",
-    "meanio-circles": "^0.1.x",
-    "angular-jwt" : "latest"
+    "passport-twitter": "latest"
   },
   "license": "MIT"
 }

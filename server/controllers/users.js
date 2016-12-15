@@ -11,6 +11,8 @@ var mongoose = require('mongoose'),
   nodemailer = require('nodemailer'),
   templates = require('../template'),
   _ = require('lodash'),
+  CPF = require("cpf_cnpj").CPF;
+  CNPJ = require("cpf_cnpj").CNPJ;
   jwt = require('jsonwebtoken'); //https://npmjs.org/package/node-jsonwebtoken
 
 
@@ -93,6 +95,16 @@ module.exports = function(MeanUser) {
             req.assert('password', 'Password must be between 8-20 characters long').len(8, 20);
             req.assert('username', 'Username cannot be more than 20 characters').len(1, 20);
             req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
+            
+            if(req.body.legalIdentifier >= 11){
+                if(!CPF.isValid(req.body.legalIdentifier)){
+                     req.assert('legalIdentifier', 'CPF not valid');
+                }
+            }else{
+                if(!CNPJ.isValid(req.body.legalIdentifier)){
+                    req.assert('legalIdentifier', 'CNPJ not valid');
+                }
+            }
 
             var errors = req.validationErrors();
             if (errors) {

@@ -66,6 +66,11 @@ var UserSchema = new Schema({
     type: Array,
     default: ['authenticated', 'anonymous']
   },
+  legalIdentifier: {
+    type: String,
+    required: true,
+    unique: true
+  },
   hashed_password: {
     type: String,
     validate: [validatePresenceOf, 'Password cannot be blank']
