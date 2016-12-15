@@ -11,8 +11,8 @@ var mongoose = require('mongoose'),
   nodemailer = require('nodemailer'),
   templates = require('../template'),
   _ = require('lodash'),
-  CPF = require("cpf_cnpj").CPF;
-  CNPJ = require("cpf_cnpj").CNPJ;
+  CPF = require("cpf_cnpj").CPF,
+  CNPJ = require("cpf_cnpj").CNPJ,
   jwt = require('jsonwebtoken'); //https://npmjs.org/package/node-jsonwebtoken
 
 
