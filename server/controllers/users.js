@@ -95,17 +95,23 @@ module.exports = function(MeanUser) {
             req.assert('password', 'Password must be between 8-20 characters long').len(8, 20);
             req.assert('username', 'Username cannot be more than 20 characters').len(1, 20);
             req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
-            
-            if(req.body.legalIdentifier >= 11){
-                if(!CPF.isValid(req.body.legalIdentifier)){
-                     req.assert('legalIdentifier', 'CPF not valid');
+
+            if(req.body.legalIdentifier.length <= 14){
+                //var cpf = CPF.format(req.body.legalIdentifier);
+                var cpfIsValid = CPF.isValid(req.body.legalIdentifier);
+                if(isValid != true){
+                    cpfIsValid = false;
+                    req.assert(false, 'CPF is not valid').equals(cpfIsValid);
                 }
             }else{
-                if(!CNPJ.isValid(req.body.legalIdentifier)){
-                    req.assert('legalIdentifier', 'CNPJ not valid');
+                //var cnpj = CNPJ.format(req.body.legalIdentifier);
+                var cnpjIsValid = CPF.isValid(req.body.legalIdentifier);
+                 if(isValid != true){
+                    cnpjIsValid = false;
+                    req.assert(false, 'CNPJ is not valid').equals(cnpjIsValid);
                 }
             }
-
+            
             var errors = req.validationErrors();
             if (errors) {
                 return res.status(400).send(errors);

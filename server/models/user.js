@@ -69,7 +69,8 @@ var UserSchema = new Schema({
   legalIdentifier: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+    get: escapeProperty
   },
   hashed_password: {
     type: String,
