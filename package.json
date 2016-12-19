@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "angular-jwt": "latest",
-    "cpf_cnpj": "^0.2.0",
     "meanio-circles": "^0.1.x",
     "nodemailer": "latest",
     "passport-facebook": "latest",
