@@ -72,6 +72,16 @@ var UserSchema = new Schema({
     unique: true,
     get: escapeProperty
   },
+  birthday: {
+    type: Date,
+    required: true,
+    get: escapeProperty
+  },
+  phone: {
+    type: String,
+    required: true,
+    get: escapeProperty
+  },
   hashed_password: {
     type: String,
     validate: [validatePresenceOf, 'Password cannot be blank']

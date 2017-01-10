@@ -131,7 +131,9 @@ angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$loca
         confirmPassword: user.confirmPassword,
         username: user.username,
         name: user.name,
-        legalIdentifier: user.legalIdentifier
+        legalIdentifier: user.legalIdentifier,
+        birthday: user.birthday,
+        phone: user.phone
       })
         .then(this.onIdentity.bind(this))
         .catch(this.onIdFail.bind(this));

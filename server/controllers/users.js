@@ -94,6 +94,8 @@ module.exports = function(MeanUser) {
             req.assert('username', 'Username cannot be more than 20 characters').len(1, 20);
             req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
             req.assert('legalIdentifier', 'You must enter a valid CPF or CNPJ').notEmpty();
+            req.assert('birthday', 'You must enter a birthday').notEmpty();
+            req.assert('phone', 'You must enter a phone').notEmpty();
 
             var errors = req.validationErrors();
             if (errors) {
