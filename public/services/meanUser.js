@@ -139,6 +139,21 @@ angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$loca
         .catch(this.onIdFail.bind(this));
     };
 
+    MeanUserKlass.prototype.update = function(user) {
+      $http.put('/api/update', {
+        email: user.email,
+        password: user.password,
+        confirmPassword: user.confirmPassword,
+        username: user.username,
+        name: user.name,
+        legalIdentifier: user.legalIdentifier,
+        birthday: user.birthday,
+        phone: user.phone
+      })
+        .then(this.onIdentity.bind(this))
+        .catch(this.onIdFail.bind(this));
+    };
+
     MeanUserKlass.prototype.resetpassword = function(user) {
         $http.post('/api/reset/' + $stateParams.tokenId, {
           password: user.password,
