@@ -206,11 +206,16 @@ module.exports = function(MeanUser) {
                     }
                     return res.status(400);
                 }
-                res.status(200).json([{
-                            msg: 'User updated with sucess',
-                            status: 'success'
-                        }]);
-            
+                
+                var payload = user;
+                payload.redirect = req.body.redirect;
+                var escaped = JSON.stringify(payload);
+                escaped = encodeURI(escaped);
+                var token = jwt.sign(escaped, config.secret);
+                    res.status(200).json({ 
+                      token: token,
+                      redirect: config.strategies.landingPage
+                    });
             });
 
             
