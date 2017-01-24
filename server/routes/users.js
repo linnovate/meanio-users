@@ -35,6 +35,9 @@ module.exports = function(MeanUser, app, auth, database, passport) {
 
       app.route('/api/reset/:token')
         .post(users.resetpassword);
+      
+      app.route('/api/change')
+        .post(users.changepassword);
 
       // Setting the local strategy route
       app.route('/api/login')

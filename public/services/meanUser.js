@@ -142,8 +142,6 @@ angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$loca
     MeanUserKlass.prototype.update = function(user) {
       $http.put('/api/update', {
         email: user.email,
-        password: user.password,
-        confirmPassword: user.confirmPassword,
         username: user.username,
         name: user.name,
         legalIdentifier: user.legalIdentifier,
@@ -153,6 +151,15 @@ angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$loca
         .then(this.onIdentity.bind(this))
         .catch(this.onIdFail.bind(this));
     };
+
+    MeanUserKlass.prototype.changepassword = function(user) {
+        $http.post('/api/change', {
+          password: user.password,
+          confirmPassword: user.confirmPassword
+        })
+        .then(this.onIdentity.bind(this))
+        .catch(this.onIdFail.bind(this));
+      };
 
     MeanUserKlass.prototype.resetpassword = function(user) {
         $http.post('/api/reset/' + $stateParams.tokenId, {
