@@ -166,7 +166,7 @@ angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$loca
           password: user.password,
           confirmPassword: user.confirmPassword
         })
-        .then(this.onIdentity.bind(this))
+        .then($location.url($meanConfig.loginPage))
         .catch(this.onIdFail.bind(this));
       };
 
