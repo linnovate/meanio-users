@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$location', '$stateParams',
-  '$cookies', '$q', '$timeout', '$meanConfig', 'Global',
-  function($rootScope, $http, $location, $stateParams, $cookies, $q, $timeout, $meanConfig, Global) {
+  '$cookies', '$q', '$timeout', '$meanConfig', 'Global', 'RestRequestApi', 'EncoderDataUtil',
+  function($rootScope, $http, $location, $stateParams, $cookies, $q, $timeout, $meanConfig, Global, RestRequestApi, EncoderDataUtil) {
 
     var self;
 
@@ -64,6 +64,8 @@ angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$loca
     }
 
     MeanUserKlass.prototype.onIdentity = function(response) {
+      console.log(response);
+      
       if (!response) return;
 
       // Workaround for Angular 1.6.x
@@ -76,7 +78,9 @@ angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$loca
         encodedUser = decodeURI(b64_to_utf8(response.token.split('.')[1]));
         user = JSON.parse(encodedUser);
       }
+      console.log(user);
       destination = angular.isDefined(response.redirect) ? response.redirect : destination;
+      console.log(destination);
       this.user = user || response;
       this.loggedin = true;
       this.loginError = 0;
@@ -89,7 +93,9 @@ angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$loca
         self.acl = response.data;
         if (destination) {
           $location.path(destination);
+           console.log("ok");
         }
+        console.log("not ok ?");        
         $rootScope.$emit('loggedin', userObj);
         Global.authenticate(userObj);
       });
@@ -135,7 +141,30 @@ angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$loca
         birthday: user.birthday,
         phone: user.phone
       })
-        .then(this.onIdentity.bind(this))
+        .then(function(success){
+          /*var encodedUser = decodeURI(b64_to_utf8(success.token.split('.')[1]));
+          var user = JSON.parse(encodedUser);
+          console.log("tst" + user);*/
+          var userData = {
+                "dueDay": 1,
+                "holder": {
+                    "email": user.email,
+                    "legalIdentifier": user.legalIdentifier,
+                    "name": user.name
+                },
+                "clientId": user._id,
+                "status": "ACTIVE"
+            };
+           RestRequestApi.postRequest(EncoderDataUtil.encodeURIToBase64("api/bill-accounts"), EncoderDataUtil.encodeDataToBase64(userData))
+                    .then(function (response) {
+                        console.log("sucesso ao salvar o usuário");
+                        MeanUser.onIdentity(success);
+                    })
+                    .catch(function (response) {
+                       
+                    });
+        })
+          
         .catch(this.onIdFail.bind(this));
     };
 
@@ -166,7 +195,7 @@ angular.module('mean.users').factory('MeanUser', [ '$rootScope', '$http', '$loca
           password: user.password,
           confirmPassword: user.confirmPassword
         })
-        .then($location.url($meanConfig.loginPage))
+        .then(this.onIdentity.bind(this))
         .catch(this.onIdFail.bind(this));
       };
 

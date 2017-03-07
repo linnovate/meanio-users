@@ -3,10 +3,12 @@
 var config = require('meanio').loadConfig();
 var jwt = require('jsonwebtoken'); //https://npmjs.org/package/node-jsonwebtoken
 
-module.exports = function(MeanUser, app, auth, database, passport) {
+module.exports = function(MeanUser, app, auth, database, passport, RestRequestApi) {
 
   // User routes use users controller
   var users = require('../controllers/users')(MeanUser);
+  var restRequest = require('../controllers/serviceRequest')(RestRequestApi);
+
 
   app.use(users.loadUser);
 
@@ -38,6 +40,12 @@ module.exports = function(MeanUser, app, auth, database, passport) {
       
       app.route('/api/change')
         .post(users.changepassword);
+
+      app.get('/api/get', restRequest.getApi);
+
+      app.post('/api/post', restRequest.postApi);
+
+      app.put('/api/put', restRequest.putApi);
 
       // Setting the local strategy route
       app.route('/api/login')
