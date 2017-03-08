@@ -31,6 +31,21 @@ var validateUniqueEmail = function(value, callback) {
   });
 };
 
+var validateUniqueLegalIdentifier = function(value, callback) {
+  var User = mongoose.model('User');
+  User.find({
+    $and: [{
+      legalIdentifier: value
+    }, {
+      _id: {
+        $ne: this._id
+      }
+    }]
+  }, function(err, user) {
+    callback(err || user.length === 0);
+  });
+};
+
 /**
  * Getter
  */
@@ -54,7 +69,7 @@ var UserSchema = new Schema({
     unique: true,
     // Regexp to validate emails with more strict rules as added in tests/users.js which also conforms mostly with RFC2822 guide lines
     match: [/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, 'Please enter a valid email'],
-    validate: [validateUniqueEmail, 'E-mail address is already in-use']
+    validate: [validateUniqueEmail, 'O endereço de E-mail já está em uso']
   },
   username: {
     type: String,
@@ -70,7 +85,8 @@ var UserSchema = new Schema({
     type: String,
     required: true,
     unique: true,
-    get: escapeProperty
+    get: escapeProperty,
+    validate: [validateUniqueLegalIdentifier, 'O CPF/CNPJ já está em uso']
   },
   birthday: {
     type: Date,
