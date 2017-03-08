@@ -3,9 +3,8 @@
 var request = require('request'),
     xml = require('jstoxml'),
     fs = require('fs'),
-    config = require('meanio').loadConfig(),
-    errorTemplate = require('../assets/templates/error');
-
+    config = require('meanio').loadConfig();
+    
 module.exports = function (RestRequestApi) {
 
     var auth = Buffer.from("admin:admin").toString('base64');
