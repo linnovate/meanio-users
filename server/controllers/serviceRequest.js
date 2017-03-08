@@ -94,7 +94,7 @@ module.exports = function (RestRequestApi) {
                 body: decodeDataFromBase64(req.body.data),
                 json: true
             }, function (error, response, body) {
-                res.send(body);
+                res.status(response.statusCode).json(body);
             })
         },
 

@@ -162,16 +162,47 @@ angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$locat
     };
 
     MeanUserKlass.prototype.update = function (user) {
-      $http.put('/api/update', {
-        email: user.email,
-        username: user.username,
-        name: user.name,
-        legalIdentifier: user.legalIdentifier,
-        birthday: user.birthday,
-        phone: user.phone
-      })
-        .then(this.onIdentity.bind(this))
-        .catch(this.onIdFail.bind(this));
+      var client;
+      RestRequestApi.getRequest(EncoderDataUtil.encodeURIToBase64("api/bill-client-accounts/" + user._id))
+        .then(function (response) {
+          client = response.data;
+
+          $http.put('/api/update', {
+            email: user.email,
+            username: user.username,
+            name: user.name,
+            legalIdentifier: user.legalIdentifier,
+            birthday: user.birthday,
+            phone: user.phone
+          })
+            .then(function (success) {
+              var encodedUser = decodeURI(b64_to_utf8(success.data.token.split('.')[1]));
+              var responseUser = JSON.parse(encodedUser);
+              var userData = {
+                "dueDay": 1,
+                "holder": {
+                  "email": responseUser.email,
+                  "name": responseUser.name
+                },
+                "id": client.id,
+                "status": "ACTIVE"
+              };
+              RestRequestApi.putRequest(EncoderDataUtil.encodeURIToBase64("api/bill-accounts"), EncoderDataUtil.encodeDataToBase64(userData))
+                .then(function (response) {
+                  MeanUser.onIdentity(success);
+                })
+                .catch(function (response) {
+                });
+            })
+            .catch(function (err) {
+              MeanUser.onIdFail(err);
+            });
+
+        })
+        .catch(function (response) {
+        });
+
+
     };
 
     MeanUserKlass.prototype.changepassword = function (user) {
