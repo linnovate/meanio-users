@@ -3,32 +3,8 @@
 var request = require('request'),
     xml = require('jstoxml'),
     fs = require('fs'),
-    nodemailer = require('nodemailer'),
     config = require('meanio').loadConfig(),
     errorTemplate = require('../assets/templates/error');
-
-function sendMail(mailOptions) {
-    var transport = nodemailer.createTransport(config.mailer);
-    transport.sendMail(mailOptions, function (err, response) {
-        if (err) return err;
-        return response;
-    });
-}
-
-function checkStatusCode(statusCode) {
-    return statusCode != 200 || statusCode != 201;
-}
-
-function mountMailError(response) {
-    if (checkStatusCode(response.statusCode)) {
-        var mailOptions = {
-            to: 'lrodrigues@teste.com.br',
-            from: 'lrodrigues@teste.com.br'
-        };
-        mailOptions = errorTemplate.request_error_email(mailOptions, response.headers.error);
-        sendMail(mailOptions);
-    }
-}
 
 module.exports = function (RestRequestApi) {
 
@@ -76,7 +52,6 @@ module.exports = function (RestRequestApi) {
                 body: decodeDataFromBase64(req.body.data),
                 json: true
             }, function (error, response, body) {
-                mountMailError(response);
                 res.status(response.statusCode).json(body);
             })
         },
