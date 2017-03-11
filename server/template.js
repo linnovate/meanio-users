@@ -3,14 +3,16 @@
 module.exports = {
   forgot_password_email: function(user, req, token, mailOptions) {
     mailOptions.html = [
-      'Hi ' + user.name + ',',
-      'We have received a request to reset the password for your account.',
-      'If you made this request, please click on the link below or paste this into your browser to complete the process:',
+      'Olá ' + user.name + ',<br//>',
+      'Nós recebemos uma requisição para modificar a senha da sua conta.',
+      'Por favor clique no link abaixo para modificar sua senha:<br//><br//>'+
+      '<a href=\''+'http://' + req.headers.host + '/reset/' + token+'\'>Alterar senha</a> <br//><br//>'+
+      'Se não conseguir clicar no link, copie a URL abaixo e cole no seu navegador para completar o processo: <br//><br//>',
       'http://' + req.headers.host + '/reset/' + token,
-      'This link will work for 1 hour or until your password is reset.',
-      'If you did not ask to change your password, please ignore this email and your account will remain unchanged.'
+      '<br//><br//>Este link funcionará por 1 hora ou até você alterar sua senha.',
+      '<br//>Se você não solicitou a mudança da sua senha, por favor ignore este e-mail e sua conta não será modificada.'
     ].join('\n\n');
-    mailOptions.subject = 'Resetting the password';
+    mailOptions.subject = 'Alteração de senha';
     return mailOptions;
   }
 };

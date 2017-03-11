@@ -88,14 +88,14 @@ module.exports = function (MeanUser) {
             user.provider = 'local';
 
             // because we set our user.provider to local our models/user.js validation will always be true
-            req.assert('name', 'You must enter a name').notEmpty();
-            req.assert('email', 'You must enter a valid email address').isEmail();
-            req.assert('password', 'Password must be between 8-20 characters long').len(8, 20);
-            req.assert('username', 'Username cannot be more than 20 characters').len(1, 20);
-            req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
-            req.assert('legalIdentifier', 'You must enter a valid CPF or CNPJ').notEmpty();
-            req.assert('birthday', 'You must enter a birthday').notEmpty();
-            req.assert('phone', 'You must enter a phone').notEmpty();
+            req.assert('name', 'Você deve informar um nome').notEmpty();
+            req.assert('email', 'Você deve informar um e-mail válido').isEmail();
+            req.assert('password', 'Senha deve ter entre 8-20 caracteres').len(8, 20);
+            req.assert('username', 'Apelido não pode ter mais de 20 caracteres').len(1, 20);
+            req.assert('confirmPassword', 'Senhas não são iguais').equals(req.body.password);
+            req.assert('legalIdentifier', 'Você deve informar um CPF ou CNPJ válido').notEmpty();
+            req.assert('birthday', 'Você deve informar uma data de nascimento').notEmpty();
+            req.assert('phone', 'Você deve informar um telefone').notEmpty();
 
             var errors = req.validationErrors();
             if (errors) {
@@ -110,7 +110,7 @@ module.exports = function (MeanUser) {
                         case 11000:
                         case 11001:
                             res.status(400).json([{
-                                msg: 'Username already taken',
+                                msg: 'Apelido já está sendo usado por outro usuário',
                                 param: 'username'
                             }]);
                             break;
@@ -162,12 +162,12 @@ module.exports = function (MeanUser) {
         update: function (req, res, next) {
 
             // because we set our user.provider to local our models/user.js validation will always be true
-            req.assert('name', 'You must enter a name').notEmpty();
-            req.assert('email', 'You must enter a valid email address').isEmail();
-            req.assert('username', 'Username cannot be more than 20 characters').len(1, 20);
-            req.assert('legalIdentifier', 'You must enter a valid CPF or CNPJ').notEmpty();
-            req.assert('birthday', 'You must enter a birthday').notEmpty();
-            req.assert('phone', 'You must enter a phone').notEmpty();
+            req.assert('name', 'Você deve informar um nome').notEmpty();
+            req.assert('email', 'Você deve informar um e-mail válido').isEmail();
+            req.assert('username', 'Apelido não pode ter mais de 20 caracteres').len(1, 20);
+            req.assert('legalIdentifier', 'Você deve informar um CPF ou CNPJ válido').notEmpty();
+            req.assert('birthday', 'Você deve informar uma data de nascimento').notEmpty();
+            req.assert('phone', 'Você deve informar um telefone').notEmpty();
 
             var errors = req.validationErrors();
             if (errors) {
@@ -182,7 +182,7 @@ module.exports = function (MeanUser) {
                         case 11000:
                         case 11001:
                             res.status(400).json([{
-                                msg: 'Username already taken',
+                                msg: 'Apelido já está em uso por outro usuário',
                                 param: 'username'
                             }]);
                             break;
@@ -251,7 +251,7 @@ module.exports = function (MeanUser) {
                 _id: id
             }).exec(function (err, user) {
                 if (err) return next(err);
-                if (!user) return next(new Error('Failed to load User ' + id));
+                if (!user) return next(new Error('Falha ao carregar o Usuário ' + id));
                 req.profile = user;
                 next();
             });
@@ -290,8 +290,8 @@ module.exports = function (MeanUser) {
 
         changepassword: function (req, res, next) {
             var user = req.user;
-            req.assert('password', 'Password must be between 8-20 characters long').len(8, 20);
-            req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
+            req.assert('password', 'Senha deve ter entre 8-20 caracteres').len(8, 20);
+            req.assert('confirmPassword', 'Senhas não são iguais').equals(req.body.password);
             var errors = req.validationErrors();
             if (errors) {
                 return res.status(400).send(errors);
@@ -338,11 +338,11 @@ module.exports = function (MeanUser) {
                 }
                 if (!user) {
                     return res.status(400).json({
-                        msg: 'Token invalid or expired'
+                        msg: 'Link inválido ou expirado'
                     });
                 }
-                req.assert('password', 'Password must be between 8-20 characters long').len(8, 20);
-                req.assert('confirmPassword', 'Passwords do not match').equals(req.body.password);
+                req.assert('password', 'Senha deve ter entre 8-20 caracteres').len(8, 20);
+                req.assert('confirmPassword', 'Senhas não são iguais').equals(req.body.password);
                 var errors = req.validationErrors();
                 if (errors) {
                     return res.status(400).send(errors);
@@ -413,11 +413,11 @@ module.exports = function (MeanUser) {
                 function (err, user) {
 
                     var response = {
-                        message: 'Mail successfully sent',
+                        message: 'E-mail enviado com sucesso',
                         status: 'success'
                     };
                     if (err) {
-                        response.message = 'User does not exist';
+                        response.message = 'Usuário não existe';
                         response.status = 'danger';
 
                     }
