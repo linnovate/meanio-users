@@ -103,7 +103,7 @@ angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$locat
         response = response.data;
 
       $location.path(response.redirect);
-      this.loginError = 'Authentication failed.';
+      this.loginError = 'Erro na autenticação.';
       this.registerError = response;
       this.validationError = response.msg;
       this.resetpassworderror = response.msg;

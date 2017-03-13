@@ -100,7 +100,7 @@ var UserSchema = new Schema({
   },
   hashed_password: {
     type: String,
-    validate: [validatePresenceOf, 'Password cannot be blank']
+    validate: [validatePresenceOf, 'Senha não pode ser vazia']
   },
   provider: {
     type: String,
@@ -133,7 +133,7 @@ UserSchema.virtual('password').set(function(password) {
  */
 UserSchema.pre('save', function(next) {
   if (this.isNew && this.provider === 'local' && this.password && !this.password.length)
-    return next(new Error('Invalid password'));
+    return next(new Error('Senha inválida'));
   next();
 });
 
