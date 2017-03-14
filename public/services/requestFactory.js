@@ -2,35 +2,35 @@
 
 angular.module('mean.users')
 
-    .factory('RestRequestApi', function ($http) {
+    .factory('RestApi', function ($http) {
 
-        function RestRequestApiKlass() {
+        function RestApiKlass() {
 
         }
 
-        var RestRequestApi = new RestRequestApiKlass();
+        var RestApi = new RestApiKlass();
 
-        RestRequestApiKlass.prototype.getRequest = function (dataRoute) {
+        RestApiKlass.prototype.getRequest = function (dataRoute) {
             return $http.get('/api/get', {
                 params: { dataRoute: dataRoute }
             })
         };
 
-        RestRequestApiKlass.prototype.postRequest = function (dataRoute, data) {
+        RestApiKlass.prototype.postRequest = function (dataRoute, data) {
             return $http.post('/api/post', {
                 dataRoute: dataRoute,
                 data: data
             })
         };
 
-        RestRequestApiKlass.prototype.putRequest = function (dataRoute, data) {
+        RestApiKlass.prototype.putRequest = function (dataRoute, data) {
             return $http.put('/api/put', {
                 dataRoute: dataRoute,
                 data: data
             })
         };
 
-        return RestRequestApi;
+        return RestApi;
     })
 
 

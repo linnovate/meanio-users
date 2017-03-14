@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$location', '$stateParams',
-  '$cookies', '$q', '$timeout', '$meanConfig', 'Global', 'RestRequestApi', 'EncoderDataUtil',
-  function ($rootScope, $http, $location, $stateParams, $cookies, $q, $timeout, $meanConfig, Global, RestRequestApi, EncoderDataUtil) {
+  '$cookies', '$q', '$timeout', '$meanConfig', 'Global', 'RestApi', 'EncoderDataUtil',
+  function ($rootScope, $http, $location, $stateParams, $cookies, $q, $timeout, $meanConfig, Global, RestApi, EncoderDataUtil) {
 
     var self;
 
@@ -149,7 +149,7 @@ angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$locat
             "clientId": responseUser._id,
             "status": "ACTIVE"
           };
-          RestRequestApi.postRequest(EncoderDataUtil.encodeURIToBase64("api/bill-accounts"), EncoderDataUtil.encodeDataToBase64(userData))
+          RestApi.postRequest(EncoderDataUtil.encodeURIToBase64("api/bill-accounts"), EncoderDataUtil.encodeDataToBase64(userData))
             .then(function (response) {
               MeanUser.onIdentity(success);
             })
@@ -163,7 +163,7 @@ angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$locat
 
     MeanUserKlass.prototype.update = function (user) {
       var client;
-      RestRequestApi.getRequest(EncoderDataUtil.encodeURIToBase64("api/bill-client-accounts/" + user._id))
+      RestApi.getRequest(EncoderDataUtil.encodeURIToBase64("api/bill-client-accounts/" + user._id))
         .then(function (response) {
           client = response.data;
 
@@ -187,7 +187,7 @@ angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$locat
                 "id": client.id,
                 "status": "ACTIVE"
               };
-              RestRequestApi.putRequest(EncoderDataUtil.encodeURIToBase64("api/bill-accounts"), EncoderDataUtil.encodeDataToBase64(userData))
+              RestApi.putRequest(EncoderDataUtil.encodeURIToBase64("api/bill-accounts"), EncoderDataUtil.encodeDataToBase64(userData))
                 .then(function (response) {
                   MeanUser.onIdentity(success);
                 })
