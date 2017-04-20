@@ -16,6 +16,14 @@ angular.module('mean.users')
             })
         };
 
+        RestApiKlass.prototype.getRequestServerIsAvailable = function () {
+            return $http.get('/api/checkServerBillIsAvailable', {
+                headers: {
+                    'Cache-Control': 'no-cache'
+                }
+            })
+        };
+
         RestApiKlass.prototype.postRequest = function (dataRoute, data) {
             return $http.post('/api/post', {
                 dataRoute: dataRoute,

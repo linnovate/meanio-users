@@ -4,11 +4,11 @@ var request = require('request'),
     xml = require('jstoxml'),
     fs = require('fs'),
     config = require('meanio').loadConfig();
-    
+
 module.exports = function (RestRequestApi) {
 
     var auth = Buffer.from("admin:admin").toString('base64');
-    
+
     function decodeURIFromBase64(pathRoute) {
         return decodeURI(Buffer.from(pathRoute, 'base64').toString());
     }
@@ -19,6 +19,29 @@ module.exports = function (RestRequestApi) {
     }
 
     return {
+
+        checkServerBillIsAvailable: function (req, res) {
+            return request.get({
+                url: config.billHost + config.billHostAvailable,
+                withCredentials: true,
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'Authorization': 'Basic ' + auth
+                },
+                /*agentOptions: {
+                    ca: fs.readFileSync('./config/env/calab2.pem')
+                }*/
+                rejectUnauthorized: false,
+                requestCert: true
+            }, function (error, response, body) {
+                if (error) {
+                    res.status(404).json("Requisição não obteve resposta do servidor");
+                } else {
+                    res.status(response.statusCode).json("Ok");
+                }
+
+            })
+        },
 
         getApi: function (req, res) {
             return request.get({
@@ -34,7 +57,11 @@ module.exports = function (RestRequestApi) {
                 rejectUnauthorized: false,
                 requestCert: true
             }, function (error, response, body) {
-                res.status(response.statusCode).send(body);
+                if (error) {
+                    res.status(404).json("Requisição não obteve resposta do servidor");
+                } else {
+                    res.status(response.statusCode).send(body);
+                }
             })
         },
 
@@ -51,7 +78,11 @@ module.exports = function (RestRequestApi) {
                 body: decodeDataFromBase64(req.body.data),
                 json: true
             }, function (error, response, body) {
-                res.status(response.statusCode).json(body);
+                if (error) {
+                    res.status(404).json("Requisição não obteve resposta do servidor");
+                } else {
+                    res.status(response.statusCode).json(body);
+                }
             })
         },
 
@@ -68,7 +99,11 @@ module.exports = function (RestRequestApi) {
                 body: decodeDataFromBase64(req.body.data),
                 json: true
             }, function (error, response, body) {
-                res.status(response.statusCode).json(body);
+                if (error) {
+                    res.status(404).json("Requisição não obteve resposta do servidor");
+                } else {
+                    res.status(response.statusCode).json(body);
+                }
             })
         },
 

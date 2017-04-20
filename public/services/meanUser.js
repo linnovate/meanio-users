@@ -114,7 +114,6 @@ angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$locat
     var MeanUser = new MeanUserKlass();
 
     MeanUserKlass.prototype.login = function (user) {
-      // this is an ugly hack due to mean-admin needs
       var destination = $location.path().indexOf('/login') === -1 ? $location.absUrl() : false;
       $http.post('/api/login', {
         email: user.email,
@@ -126,49 +125,12 @@ angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$locat
     };
 
     MeanUserKlass.prototype.register = function (user) {
-      $http.post('/api/register', {
-        email: user.email,
-        password: user.password,
-        confirmPassword: user.confirmPassword,
-        username: user.username,
-        name: user.name,
-        legalIdentifier: user.legalIdentifier,
-        birthday: user.birthday,
-        phone: user.phone
-      })
-        .then(function (success) {
-          var encodedUser = decodeURI(b64_to_utf8(success.data.token.split('.')[1]));
-          var responseUser = JSON.parse(encodedUser);
-          var userData = {
-            "dueDay": 1,
-            "holder": {
-              "email": responseUser.email,
-              "legalIdentifier": responseUser.legalIdentifier,
-              "name": responseUser.name
-            },
-            "clientId": responseUser._id,
-            "status": "ACTIVE"
-          };
-          RestApi.postRequest(EncoderDataUtil.encodeURIToBase64("api/bill-accounts"), EncoderDataUtil.encodeDataToBase64(userData))
-            .then(function (response) {
-              MeanUser.onIdentity(success);
-            })
-            .catch(function (response) {
-            });
-        })
-        .catch(function (err) {
-          MeanUser.onIdFail(err);
-        });
-    };
-
-    MeanUserKlass.prototype.update = function (user) {
-      var client;
-      RestApi.getRequest(EncoderDataUtil.encodeURIToBase64("api/bill-client-accounts/" + user._id))
+      RestApi.getRequestServerIsAvailable()
         .then(function (response) {
-          client = response.data;
-
-          $http.put('/api/update', {
+          $http.post('/api/register', {
             email: user.email,
+            password: user.password,
+            confirmPassword: user.confirmPassword,
             username: user.username,
             name: user.name,
             legalIdentifier: user.legalIdentifier,
@@ -182,12 +144,13 @@ angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$locat
                 "dueDay": 1,
                 "holder": {
                   "email": responseUser.email,
+                  "legalIdentifier": responseUser.legalIdentifier,
                   "name": responseUser.name
                 },
-                "id": client.id,
+                "clientId": responseUser._id,
                 "status": "ACTIVE"
               };
-              RestApi.putRequest(EncoderDataUtil.encodeURIToBase64("api/bill-accounts"), EncoderDataUtil.encodeDataToBase64(userData))
+              RestApi.postRequest(EncoderDataUtil.encodeURIToBase64("api/bill-accounts"), EncoderDataUtil.encodeDataToBase64(userData))
                 .then(function (response) {
                   MeanUser.onIdentity(success);
                 })
@@ -197,40 +160,107 @@ angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$locat
             .catch(function (err) {
               MeanUser.onIdFail(err);
             });
+        })
+        .catch(function (response) {
+          $location.path('/');
+        });
+    };
+
+    MeanUserKlass.prototype.update = function (user) {
+      RestApi.getRequestServerIsAvailable()
+        .then(function (response) {
+          var client;
+          RestApi.getRequest(EncoderDataUtil.encodeURIToBase64("api/bill-client-accounts/" + user._id))
+            .then(function (response) {
+              client = response.data;
+
+              $http.put('/api/update', {
+                email: user.email,
+                username: user.username,
+                name: user.name,
+                legalIdentifier: user.legalIdentifier,
+                birthday: user.birthday,
+                phone: user.phone
+              })
+                .then(function (success) {
+                  var encodedUser = decodeURI(b64_to_utf8(success.data.token.split('.')[1]));
+                  var responseUser = JSON.parse(encodedUser);
+                  var userData = {
+                    "dueDay": 1,
+                    "holder": {
+                      "email": responseUser.email,
+                      "name": responseUser.name
+                    },
+                    "id": client.id,
+                    "status": "ACTIVE"
+                  };
+                  RestApi.putRequest(EncoderDataUtil.encodeURIToBase64("api/bill-accounts"), EncoderDataUtil.encodeDataToBase64(userData))
+                    .then(function (response) {
+                      MeanUser.onIdentity(success);
+                    })
+                    .catch(function (response) {
+                    });
+                })
+                .catch(function (err) {
+                  MeanUser.onIdFail(err);
+                });
+
+            })
+            .catch(function (response) {
+            });
 
         })
         .catch(function (response) {
+          $location.path('/');
         });
-
-
     };
 
     MeanUserKlass.prototype.changepassword = function (user) {
-      $http.post('/api/change', {
-        password: user.password,
-        confirmPassword: user.confirmPassword
-      })
-        .then(this.onIdentity.bind(this))
-        .catch(this.onIdFail.bind(this));
+      RestApi.getRequestServerIsAvailable()
+        .then(function (response) {
+          $http.post('/api/change', {
+            password: user.password,
+            confirmPassword: user.confirmPassword
+          })
+            .then(this.onIdentity.bind(this))
+            .catch(this.onIdFail.bind(this));
+        })
+        .catch(function (response) {
+          $location.path('/');
+        });
     };
 
     MeanUserKlass.prototype.resetpassword = function (user) {
-      $http.post('/api/reset/' + $stateParams.tokenId, {
-        password: user.password,
-        confirmPassword: user.confirmPassword
-      })
-        .then(this.onIdentity.bind(this))
-        .catch(this.onIdFail.bind(this));
+      RestApi.getRequestServerIsAvailable()
+        .then(function (response) {
+          $http.post('/api/reset/' + $stateParams.tokenId, {
+            password: user.password,
+            confirmPassword: user.confirmPassword
+          })
+            .then(this.onIdentity.bind(this))
+            .catch(this.onIdFail.bind(this));
+        })
+        .catch(function (response) {
+          $location.path('/');
+        });
+
     };
 
     MeanUserKlass.prototype.forgotpassword = function (user) {
-      $http.post('/api/forgot-password', {
-        text: user.email
-      })
+      RestApi.getRequestServerIsAvailable()
         .then(function (response) {
-          $rootScope.$emit('forgotmailsent', response.data);
+          $http.post('/api/forgot-password', {
+            text: user.email
+          })
+            .then(function (response) {
+              $rootScope.$emit('forgotmailsent', response.data);
+            })
+            .catch(this.onIdFail.bind(this));
         })
-        .catch(this.onIdFail.bind(this));
+        .catch(function (response) {
+          $location.path('/');
+        });
+
     };
 
     MeanUserKlass.prototype.logout = function () {
