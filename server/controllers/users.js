@@ -91,7 +91,7 @@ module.exports = function (MeanUser) {
             req.assert('name', 'Você deve informar um nome').notEmpty();
             req.assert('email', 'Você deve informar um e-mail válido').isEmail();
             req.assert('password', 'Senha deve ter entre 8-20 caracteres').len(8, 20);
-            req.assert('username', 'Apelido não pode ter mais de 20 caracteres').len(1, 20);
+            req.assert('username', 'Você deve informar um Apelido com 1 a 20 caracteres').len(1, 20);
             req.assert('confirmPassword', 'Senhas não são iguais').equals(req.body.password);
             req.assert('legalIdentifier', 'Você deve informar um CPF ou CNPJ válido').notEmpty();
             req.assert('birthday', 'Você deve informar uma data de nascimento').notEmpty();
