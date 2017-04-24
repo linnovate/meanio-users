@@ -164,7 +164,7 @@ module.exports = function (MeanUser) {
             // because we set our user.provider to local our models/user.js validation will always be true
             req.assert('name', 'Você deve informar um nome').notEmpty();
             req.assert('email', 'Você deve informar um e-mail válido').isEmail();
-            req.assert('username', 'Apelido não pode ter mais de 20 caracteres').len(1, 20);
+            req.assert('username', 'Você deve informar um Apelido com 1 a 20 caracteres').len(1, 20);
             req.assert('legalIdentifier', 'Você deve informar um CPF ou CNPJ válido').notEmpty();
             req.assert('birthday', 'Você deve informar uma data de nascimento').notEmpty();
             req.assert('phone', 'Você deve informar um telefone').notEmpty();
