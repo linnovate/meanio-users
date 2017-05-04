@@ -24,8 +24,8 @@ angular.module('mean.users')
         });
     }
   ])
-  .controller('LoginCtrl', ['$rootScope', 'MeanUser', 'RestApi', '$location',
-    function ($rootScope, MeanUser, RestApi, $location) {
+  .controller('LoginCtrl', ['$rootScope', 'MeanUser', 'RestApi', '$location', 'vcRecaptchaService',
+    function ($rootScope, MeanUser, RestApi, $location, vcRecaptchaService) {
       var vm = this;
 
       RestApi.getRequestServerIsAvailable()
@@ -59,14 +59,18 @@ angular.module('mean.users')
 
       // Register the login() function
       vm.login = function () {
-        MeanUser.login(this.user);
-        RestApi.getRequestServerIsAvailable()
-          .then(function (response) {
-          })
-          .catch(function (response) {
-            MeanUser.logout();
-            $location.path('/');
-          });
+        if (vcRecaptchaService.getResponse()) {
+          MeanUser.login(this.user);
+          RestApi.getRequestServerIsAvailable()
+            .then(function (response) {
+            })
+            .catch(function (response) {
+              MeanUser.logout();
+              $location.path('/');
+            });
+        } else {
+          vm.loginError = "Passe pelo CAPTCHA para logar.";
+        }
       };
     }
   ])
