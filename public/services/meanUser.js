@@ -216,18 +216,12 @@ angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$locat
     };
 
     MeanUserKlass.prototype.changepassword = function (user) {
-      RestApi.getRequestServerIsAvailable()
-        .then(function (response) {
-          $http.post('/api/change', {
-            password: user.password,
-            confirmPassword: user.confirmPassword
-          })
-            .then(this.onIdentity.bind(this))
-            .catch(this.onIdFail.bind(this));
-        })
-        .catch(function (response) {
-          $location.path('/');
-        });
+      $http.post('/api/change', {
+        password: user.password,
+        confirmPassword: user.confirmPassword
+      })
+        .then(this.onIdentity.bind(this))
+        .catch(this.onIdFail.bind(this));
     };
 
     MeanUserKlass.prototype.resetpassword = function (user) {
@@ -286,9 +280,9 @@ angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$locat
 
         // Not Authenticated
         else {
-          $cookies.put('redirect', $location.path());
+          $cookies.put('redirect', $state.go('auth.login'));
           $timeout(deferred.reject);
-          $location.url($meanConfig.loginPage);
+          $state.go('auth.login');
         }
       });
 
