@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$location', '$stateParams',
+angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$location', '$stateParams', '$state',
   '$cookies', '$q', '$timeout', '$meanConfig', 'Global', 'RestApi', 'EncoderDataUtil',
-  function ($rootScope, $http, $location, $stateParams, $cookies, $q, $timeout, $meanConfig, Global, RestApi, EncoderDataUtil) {
+  function ($rootScope, $http, $location, $stateParams, $state, $cookies, $q, $timeout, $meanConfig, Global, RestApi, EncoderDataUtil) {
 
     var self;
 
@@ -155,6 +155,13 @@ angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$locat
                   MeanUser.onIdentity(success);
                 })
                 .catch(function (response) {
+                  MeanUser.delete(responseUser._id)
+                    .then(function (response) {
+                      MeanUser.onIdFail(response);
+                    })
+                    .catch(function (err) {
+                      MeanUser.onIdFail(err);
+                    });
                 });
             })
             .catch(function (err) {
@@ -326,6 +333,14 @@ angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$locat
       });
 
       return deferred.promise;
+    };
+
+    MeanUserKlass.prototype.delete = function (userId) {
+      $http.post('/api/delete', {
+        id: userId
+      })
+        .then(this.onIdentity.bind(this))
+        .catch(this.onIdFail.bind(this));
     };
 
     return MeanUser;
