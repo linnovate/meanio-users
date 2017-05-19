@@ -218,6 +218,17 @@ module.exports = function (MeanUser) {
 
 
         },
+
+        delete: function (req, res, next) {
+            User.findByIdAndRemove(req.body.id, function (err, user) {
+                // We'll create a simple object to send back with a message and the id of the document that was removed
+                // You can really do this however you want, though.
+                res.status(400).json([{
+                    msg: "Desculpe, por alguma falha interna não foi possivel realizar o cadastro, tente novamente mais tarde."
+                }]);
+            });
+        },
+
         loggedin: function (req, res) {
             if (!req.isAuthenticated()) return res.send('0');
             User.findById(req.user._id)
