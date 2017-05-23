@@ -61,13 +61,6 @@ angular.module('mean.users')
       vm.login = function () {
         if (vcRecaptchaService.getResponse()) {
           MeanUser.login(this.user);
-          RestApi.getRequestServerIsAvailable()
-            .then(function (response) {
-            })
-            .catch(function (response) {
-              MeanUser.logout();
-              $location.path('/');
-            });
         } else {
           vm.loginError = "Passe pelo CAPTCHA para logar.";
         }
