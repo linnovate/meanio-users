@@ -88,6 +88,12 @@ var UserSchema = new Schema({
     get: escapeProperty,
     validate: [validateUniqueLegalIdentifier, 'O CPF/CNPJ já está em uso']
   },
+  stateRegistration: {
+    type: String,
+    unique: true,
+    required: false,
+    get: escapeProperty
+  },
   birthday: {
     type: Date,
     required: true,
