@@ -24,9 +24,11 @@ angular.module('mean.users')
         });
     }
   ])
-  .controller('LoginCtrl', ['$rootScope', 'MeanUser', 'RestApi', '$location', 'vcRecaptchaService',
-    function ($rootScope, MeanUser, RestApi, $location, vcRecaptchaService) {
+  .controller('LoginCtrl', ['$rootScope', 'MeanUser', 'RestApi', '$location',
+    function ($rootScope, MeanUser, RestApi, $location) {
       var vm = this;
+
+       vm.gRecaptchaResponse = '';
 
       RestApi.getRequestServerIsAvailable()
         .then(function (response) {
@@ -58,8 +60,8 @@ angular.module('mean.users')
       });
 
       // Register the login() function
-      vm.login = function () {
-        if (vcRecaptchaService.getResponse()) {
+      vm.login = function ($rootScope) {
+        if (vm.gRecaptchaResponse.length > 1) {
           MeanUser.login(this.user);
         } else {
           vm.loginError = "Passe pelo CAPTCHA para logar.";
