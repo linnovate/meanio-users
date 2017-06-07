@@ -134,6 +134,7 @@ angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$locat
             username: user.username,
             name: user.name,
             legalIdentifier: user.legalIdentifier,
+            stateRegistration: user.stateRegistration,
             birthday: user.birthday,
             phone: user.phone
           })
@@ -145,7 +146,8 @@ angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$locat
                 "holder": {
                   "email": responseUser.email,
                   "legalIdentifier": responseUser.legalIdentifier,
-                  "name": responseUser.name
+                  "name": responseUser.name,
+                  "stateRegistration": responseUser.stateRegistration
                 },
                 "clientId": responseUser._id,
                 "status": "ACTIVE"
@@ -186,6 +188,7 @@ angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$locat
                 username: user.username,
                 name: user.name,
                 legalIdentifier: user.legalIdentifier,
+                stateRegistration: user.stateRegistration,
                 birthday: user.birthday,
                 phone: user.phone
               })
@@ -196,7 +199,8 @@ angular.module('mean.users').factory('MeanUser', ['$rootScope', '$http', '$locat
                     "dueDay": 1,
                     "holder": {
                       "email": responseUser.email,
-                      "name": responseUser.name
+                      "name": responseUser.name,
+                      "stateRegistration": responseUser.stateRegistration
                     },
                     "id": client.id,
                     "status": "ACTIVE"
