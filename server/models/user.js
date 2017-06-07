@@ -91,7 +91,6 @@ var UserSchema = new Schema({
   stateRegistration: {
     type: String,
     unique: true,
-    required: false,
     get: escapeProperty
   },
   birthday: {
