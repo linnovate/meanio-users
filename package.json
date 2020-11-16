@@ -21,7 +21,7 @@
     "passport-linkedin": "latest",
     "passport-local": "latest",
     "passport-twitter": "latest",
-    "nodemailer": "2.7.2",
+    "nodemailer": "6.4.16",
     "meanio-circles": "^0.1.x",
     "angular-jwt" : "latest"
   },
